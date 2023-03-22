@@ -33,7 +33,7 @@ public class Song extends AudioContent implements Comparable<Song>// implement t
 	// Print information about the song. First print the basic information of the AudioContent 
 	// by making use of the printInfo() method in superclass AudioContent and then print artist, composer, genre 
 	public void printInfo()
-	{
+	{	
 		super.printInfo();
 		System.out.print("Artist: " + this.artist + " Composer: " + this.composer + " Genre: " + this.genre);
 		System.out.println(""); 

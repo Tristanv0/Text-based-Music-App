@@ -40,7 +40,7 @@ public class AudioBook extends AudioContent
 	{
 		super.printInfo();
 		System.out.print("Author: " + this.author + " Narrator: " + this.narrator);
-		System.out.println("");
+		System.out.println();
 	}
 	
   // Play the audiobook by setting the audioFile to the current chapter title (from chapterTitles array list) 
@@ -59,7 +59,7 @@ public class AudioBook extends AudioContent
 		int index = 1;
 		for (String chapters : chapterTitles) {
 			System.out.println("Chapter " + index + ". " + chapters);
-			System.out.println("");
+			System.out.println();
 			index++;
 		}
 	}
@@ -75,7 +75,7 @@ public class AudioBook extends AudioContent
 	
 	//Two AudioBooks are equal if their AudioContent information is equal and both the author and narrators are equal
 	public boolean equals(Object other)
-	{
+	{	
 		AudioBook otherAB = (AudioBook) other;
 		return super.equals(otherAB) && this.author.equals(otherAB.author) && this.narrator.equals(otherAB.narrator);
 	}

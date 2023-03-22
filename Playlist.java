@@ -68,7 +68,7 @@ public class Playlist
 	// Play the specific AudioContent from the contents array list.
 	// First make sure the index is in the correct range. 
 	public void play(int index)
-	{
+	{	//if index is within range of AudioContent, play whatever is at that index
 		if (!contains(index)) return;
 		contents.get(index-1).play();
 	}

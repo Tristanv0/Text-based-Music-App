@@ -10,8 +10,7 @@ public class Library
 	private ArrayList<Song> 			songs; 
 	private ArrayList<AudioBook> 	audiobooks;
 	private ArrayList<Playlist> 	playlists; 
-	
-  //private ArrayList<Podcast> 	podcasts;
+  	//private ArrayList<Podcast> 		podcasts;
 	
 	// Public methods in this class set errorMesg string 
 	// Error Messages can be retrieved from main in class MyAudioUI by calling  getErrorMessage()
@@ -28,7 +27,7 @@ public class Library
 		songs 			= new ArrayList<Song>(); 
 		audiobooks 	= new ArrayList<AudioBook>(); ;
 		playlists   = new ArrayList<Playlist>();
-	  //podcasts		= new ArrayList<Podcast>(); ;
+	  	//podcasts		= new ArrayList<Podcast>(); ;
 	}
 	/*
 	 * Download audio content from the store. Since we have decided (design decision) to keep 3 separate lists in our library
@@ -41,7 +40,7 @@ public class Library
 	 * See the video
 	 */
 	public boolean download(AudioContent content)
-	{
+	{	// if content is a song, add to songs arraylist. checks if song is already in songs arraylist before adding
 		if (content.getType() == Song.TYPENAME) {
 			Song contentSong = (Song) content;
 			if (songs.indexOf(contentSong) == -1) {
@@ -53,7 +52,7 @@ public class Library
 				getErrorMessage();
 				return false;
 			}
-		}
+		}// if content is a audiobook, add to audiobooks arraylist. checks if audiobook is already in audiobooks arraylist before adding
 		else if (content.getType() == AudioBook.TYPENAME) {
 			AudioBook contentAudio = (AudioBook) content;
 			if (audiobooks.indexOf(contentAudio) == -1) {
@@ -96,17 +95,18 @@ public class Library
 	}
 	
   // Print Information (printInfo()) about all podcasts in the array list
- 	/*
 	public void listAllPodcasts()
 	{
-		for (int i = 0; i < podcast.size(); i++) {
+		/* 
+		for (int i = 0; i < podcasts.size(); i++) {
 			int index = i + 1;
 			System.out.print(index + ". ");
 			podcasts.get(i).printInfo();
 			System.out.println();
 		}
+		*/
 	}
-	*/
+	
   // Print the name of all playlists in the playlists array list
 	// First print the index number as in listAllSongs() above
 	public void listAllPlaylists()
@@ -125,6 +125,7 @@ public class Library
 		// Go through the songs array list and add the artist name to the new arraylist only if it is
 		// not already there. Once the artist arrayl ist is complete, print the artists names
 		ArrayList<String> artists = new ArrayList<>();
+		// loops through songs arraylist and gets artist and adds it to artists arraylist
 		for (Song song : songs) {
 			if (artists.contains(song.getArtist())) {
 				continue;
@@ -143,7 +144,7 @@ public class Library
 	// Delete a song from the library (i.e. the songs list) - 
 	// also go through all playlists and remove it from any playlist as well if it is part of the playlist
 	public boolean deleteSong(int index)
-	{
+	{	// checks if song at index in songs arraylist is in any playlist and removes it. After, it removes the song from songs arraylist.
 		if (index >= 1 || index <= songs.size()) {
 
 			for (Playlist playlist : playlists) {
@@ -262,7 +263,7 @@ public class Library
 	// Make a new playlist and add to playlists array list
 	// Make sure a playlist with the same title doesn't already exist
 	public boolean makePlaylist(String title)
-	{
+	{	//creates newPlaylist object and checks all playlists if it has the same name. if not then it adds it to the playlists arraylist
 		Playlist newPlaylist = new Playlist(title);
 		if (playlists.contains(newPlaylist)) {
 			errorMsg = "Playlist " + title + " Already Exists";
@@ -277,7 +278,7 @@ public class Library
 	
 	// Print list of content information (songs, audiobooks etc) in playlist named title from list of playlists
 	public boolean printPlaylist(String title)
-	{
+	{	
 		for (Playlist playlist : playlists) {
 			if (playlist.getTitle().equals(title)) {
 				playlist.printContents();
@@ -294,7 +295,6 @@ public class Library
 	{
 		for (Playlist playlist : playlists) {
 			if (playlist.getTitle().equals(playlistTitle)) {
-				System.out.println(playlist.getTitle());
 				playlist.playAll();
 				return true;
 			}
@@ -308,13 +308,16 @@ public class Library
 	public boolean playPlaylist(String playlistTitle, int indexInPL)
 	{
 		for (Playlist playlist : playlists) {
+			// if the given playlist title is in playlists
 			if (playlist.getTitle().equals(playlistTitle)) {
+				//checks if index is within playlist length.
 				if (playlist.contains(indexInPL) == false) {
 					errorMsg = "Song does not exist";
 					getErrorMessage();
 					return false;
 				}
 				else {
+					//plays playlist content at specific index
 					playlist.getTitle();
 					playlist.play(indexInPL);
 					return true;
@@ -334,22 +337,30 @@ public class Library
 	public boolean addContentToPlaylist(String type, int index, String playlistTitle)
     {
         for(Playlist playlist : playlists){
+			//checks if playlist title exists
             if(playlist.getTitle().equals(playlistTitle)){
+				//checks for type
                 if(type.equals("SONG")){
+					//checks if index is within songs arraylist
                     if (index < 1 || index > songs.size()){
                         errorMsg = "Song Not Found";
                         System.out.println(getErrorMessage());
                         return false;
                     }else{
+						// if all true then adds song to playlist
                         playlist.addContent(songs.get(index-1));
                         return true;
                     }
-                }else if(type.equals("AUDIOBOOK")){
+                }
+				//checks for type
+				else if(type.equals("AUDIOBOOK")){
+					//checks if index is within audiobooks arraylist
                     if (index < 1 || index > audiobooks.size()){
                         errorMsg = "Audiobook Not Found";
                         System.out.println(getErrorMessage());
                         return false;
                     }else{
+						// if all true then adds audiobook to playlist
                         playlist.addContent(audiobooks.get(index-1));
                         return true;
                     }
@@ -370,7 +381,9 @@ public class Library
 	public boolean delContentFromPlaylist(int index, String title)
 	{
 		for (Playlist playlist : playlists) {
+			//checks if playlist title exists in playlists
 			if (playlist.getTitle().equals(title)) {
+				//checks if index is within playlists arraylist
 				if (index < playlists.size() || index > 0) {
 					playlist.deleteContent(index);
 					return true;
