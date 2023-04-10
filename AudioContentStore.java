@@ -36,6 +36,7 @@ public class AudioContentStore
 							lyrics += fileScanner.nextLine() + "\n";
 						}
 						contents.add(new Song(title, year, id, Song.TYPENAME, "", length, artist, composer, Song.Genre.valueOf(genre), lyrics));
+						System.out.println("Loading SONG");
 					}
 					
 					else if (keyword.equals("AUDIOBOOK")) {
@@ -60,6 +61,7 @@ public class AudioContentStore
 							chapters.add(lines);
 						}
 						contents.add(new AudioBook(title, year, id, AudioBook.TYPENAME, "", length, author, narrator, chapterTitles, chapters));
+						System.out.println("Loading AUDIOBOOK");
 					}
 				}
 			//for titles hashmap
@@ -106,6 +108,8 @@ public class AudioContentStore
 						genres.put(song.getGenre().toString(), genreIndices);
 					}
 				}
+
+				genreIndex++;
 			}
 
 			} catch (IOException e) {
@@ -113,35 +117,53 @@ public class AudioContentStore
 			}
 			
 		}
+		//search by title
 		public void search(String title) {
+			//if titles HashMap has key title
 			if (titles.containsKey(title)) {
+				//prints the contents of title index
 				System.out.print(titles.get(title) + 1 + ". ");
 				contents.get(titles.get(title)).printInfo();
 			} else {
 				throw new AudioContentNotFoundException("No matches for " + title);
 			}
 		}
-
+		//search by artist
 		public void searcha(String artist) {
+			//if artists HashMap has a key artist
 			if (artists.containsKey(artist)) {
+				//prints contents of the indices in the integer ArrayList
 				for (int index : artists.get(artist)) {
 					System.out.print(index + 1 + ". ");
 					contents.get(index).printInfo();
+					System.out.println("");
 				}
 			} else {
 				throw new AudioContentNotFoundException("No matches for " + artist);
 			}
 		}
+		//getter method for artists HashMap
+		public HashMap<String, ArrayList<Integer>> getSearchA() {
+			return artists;
+		}
 
+		//search by genre
 		public void searchg(String genre) {
+			//if genres HashMap has a key genre
 			if (genres.containsKey(genre)) {
+				//prints contents of the indices in the integer ArrayList
 				for (int index : genres.get(genre)) {
 					System.out.print(index + 1 + ". ");
 					contents.get(index).printInfo();
+					System.out.println("");
 				}
 			} else {
 				throw new AudioContentNotFoundException("No content under genre: " + genre);
 			}
+		}
+		//getter method for genres HashMap
+		public HashMap<String, ArrayList<Integer>> getSearchG() {
+			return genres;
 		}
 		
 		public AudioContent getContent(int index)
