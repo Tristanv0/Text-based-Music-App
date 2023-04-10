@@ -40,19 +40,20 @@ public class Library
 			Song contentSong = (Song) content;
 			if (songs.indexOf(contentSong) == -1) {
 				songs.add(contentSong);
+				System.out.println("SONG " + contentSong.getTitle() + " Added to Library");
 			}
 			else {
-				throw new AlreadyDownloadedException("Song Already Downloaded");
+				throw new AlreadyDownloadedException("Song " + contentSong.getTitle() + " already downloaded");
 			}
 		}// if content is a audiobook, add to audiobooks arraylist. checks if audiobook is already in audiobooks arraylist before adding
 		else if (content.getType() == AudioBook.TYPENAME) {
 			AudioBook contentAudio = (AudioBook) content;
 			if (audiobooks.indexOf(contentAudio) == -1) {
 				audiobooks.add(contentAudio);
-
+				System.out.println("AUDIOBOOK " + contentAudio.getTitle() + " Added to Library");
 			}
 			else {
-				throw new AlreadyDownloadedException("AudioBook Already Downloaded");
+				throw new AlreadyDownloadedException("AudioBook " + contentAudio.getTitle() + " already downloaded");
 			}
 		}
 	}
