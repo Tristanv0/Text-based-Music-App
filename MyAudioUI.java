@@ -65,6 +65,7 @@ public class MyAudioUI
 					}
 					store.search(title);
 				}
+				//search all songs/audiobooks under artist/author's name
 				else if (action.equalsIgnoreCase("SEARCHA"))
 				{
 					String artist = "";
@@ -74,40 +75,84 @@ public class MyAudioUI
 					}
 					store.searcha(artist);
 				}
+				//search all songs under a type of genre
 				else if (action.equalsIgnoreCase("SEARCHG"))
+				{
+					String genre = "";
+					System.out.print("Genre [POP, ROCK, JAZZ, HIPHOP, RAP, CLASSICAL]: ");
+					if (scanner.hasNextLine()) {
+						genre = scanner.nextLine();
+					}
+					store.searchg(genre);
+				}
+				//download all songs/audiobooks under artist/author's name
+				else if (action.equalsIgnoreCase("DOWNLOADA"))
+				{
+					String artist = "";
+					System.out.print("Artist Name: ");
+					if (scanner.hasNextLine()) {
+						artist = scanner.nextLine();
+					}
+					for (int index : store.getSearchA().get(artist)) {
+						try {
+							AudioContent content = store.getContent(index+1);
+							mylibrary.download(content);
+						} catch (AudioContentNotFoundException e) {
+							System.out.println("Content Not Found in Store");
+						} catch (AlreadyDownloadedException e) {
+							System.out.println(e.getMessage());
+							continue; // continues for loop if a song is already downloaded
+						}
+					}
+				}
+				//download all songs under a type of genre
+				else if (action.equalsIgnoreCase("DOWNLOADG"))
 				{
 					String genre = "";
 					System.out.print("Genre: ");
 					if (scanner.hasNextLine()) {
 						genre = scanner.nextLine();
 					}
-					store.searchg(genre);
-				}
-				else if (action.equalsIgnoreCase("DOWNLOADA"))
-				{
-
-				}
-				else if (action.equalsIgnoreCase("DOWNLOADG"))
-				{
-
+					for (int index : store.getSearchG().get(genre)) {
+						try {
+							AudioContent content = store.getContent(index+1);
+							mylibrary.download(content);
+						} catch (AudioContentNotFoundException e) {
+							System.out.println("Content Not Found in Store");
+						} catch (AlreadyDownloadedException e) {
+							System.out.println(e.getMessage());
+							continue; // continues for loop if a song is already downloaded
+						}
+					}
 				}
 				else if (action.equalsIgnoreCase("DOWNLOAD")) 
 				{
-					int index = 0;
+					int fromIndex = 0;
+					int toIndex = 0;
 					
-					System.out.print("Store Content #: ");
+					System.out.print("From Store Content #: ");
 					if (scanner.hasNextInt())
 					{
-						index = scanner.nextInt();
+						fromIndex = scanner.nextInt();
 						scanner.nextLine(); // "consume" nl character (necessary when mixing nextLine() and nextInt())
 					}
-					AudioContent content = store.getContent(index);
-					if (content == null)
-						throw new AudioContentNotFoundException("Content Not Found in Store");
-					else {
-						mylibrary.download(content);
+					System.out.print("To Store Content #: ");
+					if (scanner.hasNextInt())
+					{
+						toIndex = scanner.nextInt();
+						scanner.nextLine();
 					}
-
+					for (int i = fromIndex; i < toIndex+1; i++) {
+						try {
+							AudioContent content = store.getContent(i);
+							mylibrary.download(content);
+						} catch (AudioContentNotFoundException e) {
+							System.out.println("Content Not Found in Store");
+						} catch (AlreadyDownloadedException e ) {
+							System.out.println(e.getMessage());
+							continue; // continues for loop if a song is already downloaded
+						}
+					}
 				}
 				// Get the *library* index (index of a song based on the songs list)
 				// of a song from the keyboard and play the song 
