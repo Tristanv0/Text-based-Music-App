@@ -102,6 +102,8 @@ public class MyAudioUI
 						} catch (AlreadyDownloadedException e) {
 							System.out.println(e.getMessage());
 							continue; // continues for loop if a song is already downloaded
+						} catch (NullPointerException e) {
+							System.out.print("Content Not Found in Store");
 						}
 					}
 				}
@@ -117,11 +119,11 @@ public class MyAudioUI
 						try {
 							AudioContent content = store.getContent(index+1);
 							mylibrary.download(content);
-						} catch (AudioContentNotFoundException e) {
-							System.out.println("Content Not Found in Store");
 						} catch (AlreadyDownloadedException e) {
 							System.out.println(e.getMessage());
 							continue; // continues for loop if a song is already downloaded
+						} catch (NullPointerException e) {
+							System.out.print("Invalid Input");
 						}
 					}
 				}
@@ -131,27 +133,35 @@ public class MyAudioUI
 					int toIndex = 0;
 					
 					System.out.print("From Store Content #: ");
+
 					if (scanner.hasNextInt())
 					{
+						System.out.print("From Store Content #: ");
 						fromIndex = scanner.nextInt();
 						scanner.nextLine(); // "consume" nl character (necessary when mixing nextLine() and nextInt())
-					}
-					System.out.print("To Store Content #: ");
-					if (scanner.hasNextInt())
-					{
-						toIndex = scanner.nextInt();
-						scanner.nextLine();
-					}
-					for (int i = fromIndex; i < toIndex+1; i++) {
-						try {
-							AudioContent content = store.getContent(i);
-							mylibrary.download(content);
-						} catch (AudioContentNotFoundException e) {
-							System.out.println("Content Not Found in Store");
-						} catch (AlreadyDownloadedException e ) {
-							System.out.println(e.getMessage());
-							continue; // continues for loop if a song is already downloaded
+						
+						System.out.print("To Store Content #: ");
+						if (scanner.hasNextInt())
+						{
+							toIndex = scanner.nextInt();
+							scanner.nextLine();
 						}
+					}
+					
+					try {
+						if (store.getContent(toIndex) == null || store.getContent(fromIndex) == null)
+							throw new NullPointerException();
+						for (int i = fromIndex; i < toIndex+1; i++) {
+							try {
+								AudioContent content = store.getContent(i);
+								mylibrary.download(content);
+							} catch (AlreadyDownloadedException e ) {
+								System.out.println(e.getMessage());
+								continue; // continues for loop if a song is already downloaded
+							}
+						}
+					} catch (NullPointerException e) {
+						System.out.println("Invalid Input");
 					}
 				}
 				// Get the *library* index (index of a song based on the songs list)
@@ -356,6 +366,8 @@ public class MyAudioUI
 			} catch(PlaylistException e) {
 				System.out.println(e.getMessage());
 			} catch(AlreadyDownloadedException e) {
+				System.out.println(e.getMessage());
+			} catch(NullPointerException e) {
 				System.out.println(e.getMessage());
 			}
 			System.out.print("\n>");

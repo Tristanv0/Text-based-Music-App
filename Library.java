@@ -372,3 +372,9 @@ class PlaylistException extends RuntimeException {
 		super(message);
 	}
 }
+
+class NullPointerException extends RuntimeException {
+
+	public NullPointerException() {
+	}
+}
