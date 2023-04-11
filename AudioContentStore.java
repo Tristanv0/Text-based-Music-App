@@ -71,6 +71,7 @@ public class AudioContentStore
 			//for artists hashmap
 			int contentIndex = 0;
 			for (AudioContent content : contents) {
+				//if content type is song
 				if (content.getType() == Song.TYPENAME) {
 					Song song = (Song) content;
 					if (artists.containsKey(song.getArtist())) {
@@ -81,6 +82,7 @@ public class AudioContentStore
 						artists.put(song.getArtist(), artistIndices);
 					}
 				}
+				//If content type is audiobook
 				else if (content.getType() == AudioBook.TYPENAME) {
 					AudioBook abook = (AudioBook) content;
 					if (artists.containsKey(abook.getAuthor())) {
