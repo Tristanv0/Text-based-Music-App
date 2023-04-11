@@ -148,21 +148,18 @@ public class MyAudioUI
 						}
 					}
 					
-					try {
-						if (store.getContent(toIndex) == null || store.getContent(fromIndex) == null)
-							throw new NullPointerException();
-						for (int i = fromIndex; i < toIndex+1; i++) {
-							try {
-								AudioContent content = store.getContent(i);
-								mylibrary.download(content);
-							} catch (AlreadyDownloadedException e ) {
-								System.out.println(e.getMessage());
-								continue; // continues for loop if a song is already downloaded
-							}
+					for (int i = fromIndex; i < toIndex+1; i++) {
+						try {
+							AudioContent content = store.getContent(i);
+							mylibrary.download(content);
+						} catch (AlreadyDownloadedException e ) {
+							System.out.println(e.getMessage());
+							continue; // continues for loop if a song is already downloaded
+						}  catch (NullPointerException e) {
+							System.out.println("Invalid Input");
 						}
-					} catch (NullPointerException e) {
-						System.out.println("Invalid Input");
 					}
+					
 				}
 				// Get the *library* index (index of a song based on the songs list)
 				// of a song from the keyboard and play the song 
@@ -367,8 +364,8 @@ public class MyAudioUI
 				System.out.println(e.getMessage());
 			} catch(AlreadyDownloadedException e) {
 				System.out.println(e.getMessage());
-			} catch(NullPointerException e) {
-				System.out.println(e.getMessage());
+			} catch(Exception e) {
+				System.out.println("Invalid Input");
 			}
 			System.out.print("\n>");
 		}
